@@ -1,0 +1,1 @@
+<MyButton />’un büyük harf ile başladığına dikkat edin. Bu onun bir React bileşeni olduğunu belirtir. 
