@@ -7,7 +7,7 @@ function Square({value, onSquareClick}: {value: string, onSquareClick: () => voi
   >{value}</button>
 }
 
-export default function Board() {
+export function Board() {
   const [xIsNext, setXIsNext] = useState(true);
   const [squaeres, setSquares] = useState(Array(9).fill(null));
 
@@ -75,4 +75,17 @@ function calculateWinner(squares: Array<number>){
       }
   }
   return null;
+}
+
+export default function Game(){
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board />
+      </div>
+      <div className="game-info">
+        <ol>{/*YAPILACAKLAR*/}</ol>
+      </div>
+    </div>
+  )
 }
