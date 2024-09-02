@@ -7,9 +7,7 @@ function Square({value, onSquareClick}: {value: string, onSquareClick: () => voi
   >{value}</button>
 }
 
-export function Board() {
-  const [xIsNext, setXIsNext] = useState(true);
-  const [squaeres, setSquares] = useState(Array(9).fill(null));
+export function Board({xIsNext, squaeres, onPlay}: {xIsNext: boolean, squaeres: Array<string>, onPlay: (x: any)=>void}) {
 
   function handleClick(i: number){
     if(squaeres[i] || calculateWinner(squaeres)){
@@ -22,8 +20,7 @@ export function Board() {
     else{
       nextSquares[i] = "o";
     }
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    onPlay(nextSquares);
   }
 
   const winner = calculateWinner(squaeres);
@@ -56,7 +53,7 @@ export function Board() {
   );
 }
 
-function calculateWinner(squares: Array<number>){
+function calculateWinner(squares: Array<string>){
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -77,14 +74,44 @@ function calculateWinner(squares: Array<number>){
   return null;
 }
 
-export default function Game(){
+export default function Game()
+{
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [currentMove, setCurrentMove] = useState(0);
+  const xIsNext = currentMove % 2 === 0;
+  const currentSquares = history[currentMove];
+
+  function handlePlay(nextSquares: any){
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);    
+  }
+
+  function jumpTo(nextMove: any){
+    setCurrentMove(nextMove);
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if(move >0){
+      description = '# numaralı hamleye git ' + move;
+    } else {
+      description = 'Oyunun başlangıcına git';
+    }
+    return(
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
   return (
     <div className="game">
       <div className="game-board">
-        <Board />
+        <Board xIsNext={xIsNext} squaeres={currentSquares} onPlay={handlePlay}/>
       </div>
       <div className="game-info">
-        <ol>{/*YAPILACAKLAR*/}</ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   )
