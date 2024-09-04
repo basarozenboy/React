@@ -7,7 +7,7 @@ function Square({value, onSquareClick}: {value: string, onSquareClick: () => voi
   >{value}</button>
 }
 
-export function Board({xIsNext, squaeres, onPlay}: {xIsNext: boolean, squaeres: Array<string>, onPlay: (x: any)=>void}) {
+export function Board({xIsNext, squaeres, onPlay}: {xIsNext: boolean, squaeres: Array<string>, onPlay: (x: string[])=>void}) {
 
   function handleClick(i: number){
     if(squaeres[i] || calculateWinner(squaeres)){
@@ -81,17 +81,17 @@ export default function Game()
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
-  function handlePlay(nextSquares: any){
+  function handlePlay(nextSquares: string[]){
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);    
   }
 
-  function jumpTo(nextMove: any){
+  function jumpTo(nextMove: number){
     setCurrentMove(nextMove);
   }
 
-  const moves = history.map((squares, move) => {
+  const moves = history.map((move: any) => {
     let description;
     if(move >0){
       description = '# numaralı hamleye git ' + move;
