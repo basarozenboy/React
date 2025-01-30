@@ -1,3 +1,15 @@
+import { Button } from "primereact/button";
+
 export default function Page() {
-    return <p>Customers Page</p>;
-  }
+  return (
+    <>
+      <Button label="Primary" />
+      <Button label="Secondary" severity="secondary" />
+      <Button label="Success" severity="success" />
+      <Button label="Info" severity="info" />
+      <Button label="Warning" severity="warning" />
+      <Button label="Help" severity="help" />
+      <Button label="Danger" severity="danger" />
+    </>
+  );
+}
