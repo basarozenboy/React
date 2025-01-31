@@ -8,6 +8,7 @@ import { Form, useForm } from "react-hook-form";
 import { log } from "console";
 import { Input } from "postcss";
 import { InputText } from "primereact/inputtext";
+import CustomerForm from "@/app/components/CustomerForm";
 
 export default function App() {
   const {
@@ -44,105 +45,51 @@ export default function App() {
     }
   }
 
+  const handleCreateUser = async (data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  }) => {
+    try {
+      await addUser(data);
+      console.log("Customer added successfully!");
+    } catch (error) {
+      console.log("Error adding customer");
+    } finally {
+      console.log(false);
+    }
+  };
+
   return (
-    <>
-      <main className="flex flex-col items-center justify-center min-h-screen">
-        <div className="card">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="bg-white rounded-lg space-y-6"
-          >
-            <h2 className="text-2xl font-semibold text-gray-700 text-center">
-              Add Customer
-            </h2>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-600"></label>
-              <InputText
-                type="text"
-                placeholder="First Name"
-                className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
-                {...register("firstName", {
-                  required: "First name is required",
-                })}
-              />
-              {errors.firstName && (
-                <p className="text-red-500 text-sm">
-                  {typeof errors.firstName?.message === "string" && (
-                    <p className="text-red-500 text-sm">
-                      {errors.firstName.message}
-                    </p>
-                  )}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-600"></label>
-              <InputText
-                type="text"
-                placeholder="Last Name"
-                className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
-                {...register("lastName", { required: "Last name is required" })}
-              />
-              {errors.lastName && (
-                <p className="text-red-500 text-sm">
-                  {typeof errors.lastName.message === "string" &&
-                    errors.lastName.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-600"></label>
-              <InputText
-                type="email"
-                placeholder="Email"
-                className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
-                {...register("email", { required: "Email is required" })}
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm">
-                  {typeof errors.email.message === "string" &&
-                    errors.email.message}
-                </p>
-              )}
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
-            >
-              Add Customer
-            </Button>
-          </form>
-        </div>
-        <div className="card">
-          <DataTable
-            paginator
-            rows={5}
-            rowsPerPageOptions={[5, 10, 25, 50]}
-            value={data}
-            tableStyle={{ minWidth: "50rem" }}
-          >
-            <Column field="id" header="Id"></Column>
-            <Column field="firstName" header="First Name"></Column>
-            <Column field="lastName" header="Last Name"></Column>
-            <Column field="email" header="Email"></Column>
-            <Column
-              header="Actions"
-              body={(rowData) => (
-                <Button
-                  className="mr-1 p-button-danger"
-                  onClick={() => handleRemove(rowData.id)}
-                >
-                  Remove
-                </Button>
-              )}
-            ></Column>
-          </DataTable>
-        </div>
-      </main>
-    </>
+    <main className="flex flex-col items-center justify-center min-h-screen">
+      <div className="card">
+        <CustomerForm onSubmit={handleCreateUser} />
+      </div>
+      <div className="card">
+        <DataTable
+          paginator
+          rows={5}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          value={data}
+          tableStyle={{ minWidth: "50rem" }}
+        >
+          <Column field="id" header="Id"></Column>
+          <Column field="firstName" header="First Name"></Column>
+          <Column field="lastName" header="Last Name"></Column>
+          <Column field="email" header="Email"></Column>
+          <Column
+            header="Actions"
+            body={(rowData) => (
+              <Button
+                className="mr-1 p-button-danger"
+                onClick={() => handleRemove(rowData.id)}
+              >
+                Remove
+              </Button>
+            )}
+          ></Column>
+        </DataTable>
+      </div>
+    </main>
   );
 }
