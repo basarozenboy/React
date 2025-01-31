@@ -61,7 +61,7 @@ export default function App() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen">
+    <>
       <div className="card">
         <CustomerForm onSubmit={handleCreateUser} />
       </div>
@@ -90,6 +90,6 @@ export default function App() {
           ></Column>
         </DataTable>
       </div>
-    </main>
+    </>
   );
 }
