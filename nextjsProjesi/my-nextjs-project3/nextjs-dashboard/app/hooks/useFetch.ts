@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 // Fetcher function
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -13,16 +13,19 @@ export function useFetchData<T>(endpoint: string) {
     isLoading,
   };
 }
-// Custom hook for deleting a user
-export function useDeleteUser(endpoint: string) {
-  const { mutate } = useSWR(null, fetcher);
 
-  fetch(endpoint, {
-    method: 'DELETE',
-  });
-  //mutate(endpoint);
+export const useDeleteUser = async (endpoint: string) => {
+    try {
+      const response = await fetch(endpoint, { method: "DELETE" });
 
-  return {
-    1: 1,
-  };
-}
+      if (!response.ok) {
+        throw new Error("Failed to delete user");
+      }
+
+      // Optimistically update the cache after deleting
+      mutate("http://localhost:9080/api/v1/Users");
+    } catch (error) {
+      console.error("Delete error:", error);
+      throw error;
+    }
+};

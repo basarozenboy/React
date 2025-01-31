@@ -4,16 +4,19 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useFetchData, useDeleteUser } from "@/app/hooks/useFetch";
 import React, { useState, useEffect } from "react";
+import { log } from "console";
 
 export default function App() {
   const { data } = useFetchData<user[]>("http://localhost:9080/api/v1/Users");
 
   async function handleRemove(id: any): Promise<void> {
     try {
-      // await useDeleteUser(`http://localhost:9080/api/v1/Users/${id}`);
-      fetch(`http://localhost:9080/api/v1/Users/${id}`, {
-        method: "DELETE",
-      });
+      console.log("Removing user with id:", id);
+      console.log(`http://localhost:9080/api/v1/Users/${id}`);
+      useDeleteUser(`http://localhost:9080/api/v1/Users/${id}`);
+      //fetch(`http://localhost:9080/api/v1/Users/${id}`, {
+      //   method: "DELETE",
+      // });
     } catch (error) {
       console.error("Error removing user:", error);
     }
