@@ -14,7 +14,6 @@ export function useFetchData<T>(endpoint: string) {
   };
 }
 
-
 export const useDeleteUser = () => {
   const deleteUser = async (url: string) => {
     try {

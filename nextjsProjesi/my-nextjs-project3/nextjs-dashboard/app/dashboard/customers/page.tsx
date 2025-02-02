@@ -2,35 +2,13 @@
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { useFetchData, useDeleteUser, useAddUser } from "@/app/hooks/useFetch";
-import React, { useState, useEffect } from "react";
-import { Form, useForm } from "react-hook-form";
-import { log } from "console";
-import { Input } from "postcss";
-import { InputText } from "primereact/inputtext";
-import CustomerForm from "@/app/components/CustomerForm";
+import { useFetchData, useDeleteUser } from "@/app/hooks/useFetch";
+import React from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function App() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = async (data: any) => {
-    try {
-      await addUser(data);
-      console.log("User added successfully!");
-    } catch (error) {
-      console.log("Error: Unable to add user");
-    } finally {
-      console.log(false);
-    }
-  };
-
-  const { data } = useFetchData<user[]>("http://localhost:9080/api/v1/Users");
-  const addUser = useAddUser();
   const deleteUser = useDeleteUser();
+  const { data } = useFetchData<user[]>("http://localhost:9080/api/v1/Users");
 
   async function handleRemove(id: any): Promise<void> {
     try {
@@ -45,25 +23,22 @@ export default function App() {
     }
   }
 
-  const handleCreateUser = async (data: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  }) => {
-    try {
-      await addUser(data);
-      console.log("Customer added successfully!");
-    } catch (error) {
-      console.log("Error adding customer");
-    } finally {
-      console.log(false);
-    }
+  const router = useRouter(); // Initialize the Next.js router
+  const pathname = usePathname(); // Get the current URL path
+
+  // Function to handle button click and navigate to the add customer page
+  const goToAddCustomer = () => {
+    router.push(`${pathname}/addCustomer`); // Append "addCustomer" to the current path
   };
 
   return (
     <>
-      <div className="card">
-        <CustomerForm onSubmit={handleCreateUser} />
+      <div className="card text-left p-4">
+        <Button
+          onClick={goToAddCustomer}
+          className="px-5 py-2 text-lg font-semibold text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 transition-all"
+          label="Add Customer"
+        />
       </div>
       <div className="card">
         <DataTable
