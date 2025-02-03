@@ -57,3 +57,31 @@ export const useAddUser = () => {
 
   return addUser;
 };
+
+  export const useUpdateUser = ({ customerID }: { customerID: string }) => {
+  const updateUser = async (userData: { firstName: string; lastName: string; email: string }) => {
+    try {
+      const response = await fetch(`http://localhost:9080/api/v1/Users/${customerID}`, {
+        method: "PUT", // Using PUT to update the existing user
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update user");
+      }
+
+      // Optimistically update the user list
+      mutate("http://localhost:9080/api/v1/Users");
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw error;
+    }
+  };
+
+  return updateUser;
+};

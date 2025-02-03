@@ -11,14 +11,25 @@ interface CustomerFormProps {
     email: string;
   }) => void;
   isLoading?: boolean;
+  defaultValues?: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  };
 }
 
-const CustomerForm: React.FC<CustomerFormProps> = ({ onSubmit, isLoading }) => {
+const CustomerForm: React.FC<CustomerFormProps> = ({
+  onSubmit,
+  isLoading,
+  defaultValues,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ firstName: string; lastName: string; email: string }>();
+  } = useForm<{ firstName: string; lastName: string; email: string }>({
+    defaultValues, // Set default values for the form
+  });
 
   return (
     <form
@@ -26,11 +37,13 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ onSubmit, isLoading }) => {
       className="bg-white p-6 rounded-lg space-y-6 max-w-md mx-auto"
     >
       <h2 className="text-2xl font-semibold text-gray-700 text-center">
-        Add Customer
+        Add/Update Customer
       </h2>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600"></label>
+        <label className="block text-sm font-medium text-gray-600">
+          First Name
+        </label>
         <InputText
           type="text"
           placeholder="First Name"
@@ -45,7 +58,9 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ onSubmit, isLoading }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600"></label>
+        <label className="block text-sm font-medium text-gray-600">
+          Last Name
+        </label>
         <InputText
           type="text"
           placeholder="Last Name"
@@ -60,7 +75,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ onSubmit, isLoading }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600"></label>
+        <label className="block text-sm font-medium text-gray-600">Email</label>
         <InputText
           type="email"
           placeholder="Email"
@@ -79,7 +94,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ onSubmit, isLoading }) => {
         className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
         disabled={isLoading}
       >
-        {isLoading ? "Adding..." : "Add Customer"}
+        {isLoading ? "Adding..." : "Add/Update Customer"}
       </Button>
     </form>
   );

@@ -15,12 +15,13 @@ export default function App() {
       console.log("Removing user with id:", id);
       console.log(`http://localhost:9080/api/v1/Users/${id}`);
       await deleteUser(`http://localhost:9080/api/v1/Users/${id}`);
-      //fetch(`http://localhost:9080/api/v1/Users/${id}`, {
-      //   method: "DELETE",
-      // });
     } catch (error) {
       console.error("Error removing user:", error);
     }
+  }
+
+  async function handleUpdate(id: any): Promise<void> {
+    router.push(`${pathname}/${id}/edit`);
   }
 
   const router = useRouter(); // Initialize the Next.js router
@@ -60,6 +61,17 @@ export default function App() {
                 onClick={() => handleRemove(rowData.id)}
               >
                 Remove
+              </Button>
+            )}
+          ></Column>
+          <Column
+            header="Actions"
+            body={(rowData) => (
+              <Button
+                className="mr-1 p-button"
+                onClick={() => handleUpdate(rowData.id)}
+              >
+                Update
               </Button>
             )}
           ></Column>
