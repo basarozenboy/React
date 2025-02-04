@@ -1,4 +1,6 @@
 import useSWR, { mutate } from "swr";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Fetcher function
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -44,14 +46,16 @@ export const useAddUser = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add user");
+        const errorData = await response.json(); // Parse the error response
+        toast.error(errorData.message);
+        return false; // Return false on error
       }
 
       // Optimistically update user list
       mutate("http://localhost:9080/api/v1/Users");
+      return true;
     } catch (error) {
-      console.error("Error adding user:", error);
-      throw error;
+        throw error;
     }
   };
 

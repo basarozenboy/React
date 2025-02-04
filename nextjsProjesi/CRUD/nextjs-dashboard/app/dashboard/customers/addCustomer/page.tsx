@@ -21,14 +21,14 @@ export default function Page() {
     email: string;
   }) => {
     try {
-      await addUser(data);
+      const response = await addUser(data);
+      if (!response) return;
+
+      router.push(`${parentPath}`);
       console.log("Customer added successfully!");
     } catch (error) {
-      console.log("Error adding customer");
-    } finally {
-      console.log(false);
+      throw error;
     }
-    router.push(`${parentPath}`);
   };
 
   return (
