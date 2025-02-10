@@ -10,11 +10,11 @@ export default async function LatestInvoices() {
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Latest Invoices
       </h2>
-      <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
+      <div className="flex grow flex-col justify-between rounded-xl p-4">
         {/* NOTE: Uncomment this code in Chapter 7 */}
 
         {
-          <div className="bg-white px-6">
+          <div className="px-6">
             {latestInvoices.map((invoice) => {
               return (
                 <div key={invoice.id}>
@@ -27,7 +27,7 @@ export default async function LatestInvoices() {
                       height={32}
                     />
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold md:text-base">
+                      <p className="truncate text-sm font-semibold">
                         {invoice.name}
                       </p>
                       <p className="hidden text-sm text-gray-500 sm:block">
