@@ -24,7 +24,7 @@ export function useFetchData<T>(endpoint: string) {
 export const useDeleteUser = () => {
   const deleteUser = async (url: string) => {
     try {
-      const response = await fetch(url, { method: "DELETE" });
+      const response = await fetch(url, { method: "DELETE", credentials: "include" });
 
       if (!response.ok) {
         throw new Error("Failed to delete user");
@@ -48,6 +48,7 @@ export const useAddUser = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
+        credentials: "include"
       });
 
       if (!response.ok) {
@@ -78,6 +79,7 @@ export const useAddUser = () => {
           lastName: userData.lastName,
           email: userData.email,
         }),
+        credentials: "include"
       });
 
       if (!response.ok) {
