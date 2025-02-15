@@ -1,18 +1,29 @@
+import { fetcher } from "@/app/hooks/useFetch";
 import {
   UserGroupIcon,
   HomeIcon,
-  DocumentDuplicateIcon,
+  UsersIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-
-// Map of links to display in the side navigation.
-// Depending on the size of the application, this would be stored in a database.
-const links = [
-  { name: "Home", href: "/dashboard", icon: HomeIcon },
-  { name: "Customers", href: "/dashboard/customers", icon: UserGroupIcon },
-];
+import useSWR from "swr";
 
 export default function NavLinks() {
+  const { data: user, error } = useSWR("http://localhost:9080/api/me", fetcher);
+
+  // 🔹 Define navigation links dynamically
+  const links = [{ name: "Home", href: "/dashboard", icon: HomeIcon }];
+
+  // 🔹 If user is NOT logged in, show the "Log In" button
+  if (user) {
+    links.push({
+      name: "Customers",
+      href: "/dashboard/customers",
+      icon: UserGroupIcon,
+    });
+  } else {
+    links.push({ name: "Log In", href: "/login", icon: UsersIcon });
+  }
+
   return (
     <>
       {links.map((link) => {

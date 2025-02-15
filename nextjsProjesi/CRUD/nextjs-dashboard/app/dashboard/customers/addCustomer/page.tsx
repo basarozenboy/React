@@ -19,6 +19,7 @@ export default function Page() {
     firstName: string;
     lastName: string;
     email: string;
+    userName: string;
   }) => {
     try {
       const response = await addUser(data);

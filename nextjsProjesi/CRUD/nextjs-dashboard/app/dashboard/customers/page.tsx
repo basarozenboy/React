@@ -2,18 +2,42 @@
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { useFetchData, useDeleteUser } from "@/app/hooks/useFetch";
-import React from "react";
+import { useFetchData, useDeleteUser, fetcher } from "@/app/hooks/useFetch";
 import { useRouter, usePathname } from "next/navigation";
+import useSWR from "swr";
+import React from "react";
 
 export default function App() {
+  const router = useRouter();
+  const pathname = usePathname();
   const deleteUser = useDeleteUser();
   const { data } = useFetchData<user[]>("http://localhost:9080/api/v1/Users");
+
+  // 🔹 Fetch user authentication status
+  const {
+    data: user,
+    error,
+    isLoading,
+  } = useSWR("http://localhost:9080/api/me", fetcher);
+
+  // 🔹 Redirect if not authenticated
+  React.useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/login"); // Redirect to login page
+    }
+  }, [user, isLoading, router]);
+
+  // 🔹 Show loading state while checking authentication
+  if (isLoading) {
+    return <div className="text-center mt-10">Checking authentication...</div>;
+  }
+
+  // 🔹 Prevent rendering if user is not authenticated (avoids flickering)
+  if (!user) return null;
 
   async function handleRemove(id: any): Promise<void> {
     try {
       console.log("Removing user with id:", id);
-      console.log(`http://localhost:9080/api/v1/Users/${id}`);
       await deleteUser(`http://localhost:9080/api/v1/Users/${id}`);
     } catch (error) {
       console.error("Error removing user:", error);
@@ -24,12 +48,8 @@ export default function App() {
     router.push(`${pathname}/${id}/edit`);
   }
 
-  const router = useRouter(); // Initialize the Next.js router
-  const pathname = usePathname(); // Get the current URL path
-
-  // Function to handle button click and navigate to the add customer page
   const goToAddCustomer = () => {
-    router.push(`${pathname}/addCustomer`); // Append "addCustomer" to the current path
+    router.push(`${pathname}/addCustomer`);
   };
 
   return (

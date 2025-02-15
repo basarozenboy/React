@@ -3,7 +3,12 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Fetcher function
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+export const fetcher = (url: string) =>
+  fetch(url, { credentials: "include" }) // 🔹 Automatically includes JWT cookie
+    .then((res) => {
+      if (!res.ok) throw new Error("Unauthorized");
+      return res.json();
+    });
 
 // Custom SWR hook with generics
 export function useFetchData<T>(endpoint: string) {
@@ -37,7 +42,7 @@ export const useDeleteUser = () => {
 };
 
 export const useAddUser = () => {
-  const addUser = async (userData: { firstName: string; lastName: string; email: string }) => {
+  const addUser = async (userData: { firstName: string; lastName: string; email: string; userName: string }) => {
     try {
       const response = await fetch("http://localhost:9080/api/v1/Users", {
         method: "POST",

@@ -3,18 +3,22 @@
 import { useForm } from "react-hook-form";
 import { InputText } from "primereact/inputtext"; // Assuming you're using PrimeReact
 import { Button } from "primereact/button";
+import useSWR from "swr";
+import { fetcher } from "../hooks/useFetch";
 
 interface CustomerFormProps {
   onSubmit: (data: {
     firstName: string;
     lastName: string;
     email: string;
+    userName: string;
   }) => void;
   isLoading?: boolean;
   defaultValues?: {
     firstName?: string;
     lastName?: string;
     email?: string;
+    userName?: string;
   };
 }
 
@@ -27,9 +31,18 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ firstName: string; lastName: string; email: string }>({
+  } = useForm<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    userName: string;
+  }>({
     defaultValues, // Set default values for the form
   });
+
+  const { data: user, error } = useSWR("http://localhost:9080/api/me", fetcher);
+
+  if (error) return <p>Error: Unauthorized</p>;
 
   return (
     <form
@@ -85,6 +98,23 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
         {errors.email && (
           <p className="text-red-500 text-sm">
             {errors.email.message as string}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-600">
+          User Name
+        </label>
+        <InputText
+          type="text"
+          placeholder="User Name"
+          className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
+          {...register("userName", { required: "User name is required" })}
+        />
+        {errors.userName && (
+          <p className="text-red-500 text-sm">
+            {errors.userName.message as string}
           </p>
         )}
       </div>
