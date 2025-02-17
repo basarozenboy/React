@@ -3,6 +3,7 @@ import {
   UserGroupIcon,
   HomeIcon,
   UsersIcon,
+  ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import useSWR from "swr";
@@ -22,6 +23,14 @@ export default function NavLinks() {
     });
   } else {
     links.push({ name: "Log In", href: "/login", icon: UsersIcon });
+  }
+
+  if (user?.role === "Admin") {
+    links.push({
+      name: "Admin Panel",
+      href: "/dashboard/admin",
+      icon: ShieldCheckIcon,
+    });
   }
 
   return (

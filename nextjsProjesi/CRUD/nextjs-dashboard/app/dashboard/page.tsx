@@ -2,13 +2,7 @@
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import { Button } from "primereact/button";
-
-const fetcher = (url: string) =>
-  fetch(url, { credentials: "include" }) // 🔹 Automatically includes JWT cookie
-    .then((res) => {
-      if (!res.ok) throw new Error("Unauthorized");
-      return res.json();
-    });
+import { fetcher } from "../hooks/useFetch";
 
 export default function DashboardPage() {
   const router = useRouter();
